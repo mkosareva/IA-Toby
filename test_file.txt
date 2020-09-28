@@ -1,1 +1,5 @@
+<<<<<<< HEAD
 this is a very new
+=======
+this is second new file
+>>>>>>> c2d12db7cd6137322016c82387f27846cc64cc5e
