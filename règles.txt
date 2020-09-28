@@ -1,0 +1,22 @@
+Tous les documents doivent être identifiés, i.e., posséder un titre
+Tous les documents doivent contenir :
+une table des matières
+une liste des illustrations numérotées (figures, tableaux, etc.)
+une introduction (précisez l’objectif du document et résumez le contenu)
+une guide de lecture (précisez, pour chaque type de lecteur, comment utiliser efficacement le docu
+ment)
+
+un glossaire (définissez l’ensemble des termes spécialisés du document)
+des références (indiquez les références bibliographiques vers d’autres documents apportant des inf
+ormations complémentaires)
+
+un index (indiquez la liste les mots-clés du document et où les trouver dans celui-ci)
+Faîtes des phrases à la forme active
+Faîtes des phrases courtes (une phrase une idée)
+Faîtes des phrases précises
+Faîtes des paragraphes courts (la qualité vaut mieux que la quantité)
+Faîtes attention à l’orthographe (faîtes vous relire)
+Utilisez une présentation pertinente
+Respectez les règles de typographie
+Proposez plusieurs explications lorsque vous abordez un point complexe
+Explicitez les références que vous utilisez
