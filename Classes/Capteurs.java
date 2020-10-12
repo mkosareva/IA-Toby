@@ -19,14 +19,24 @@ public class Capteurs {
 		return f;
 	}
 	
+	/**
+	 * @return boolean
+	 */
 	public boolean CapteurToucher () {
 		boolean b= true;
 		return b;
 	}
 	
+	/**
+	 * @return String
+	 */
 	public String CapteurCouleur () {
 		String s="";
 		return s;
+	}
+	
+	public void connaitrePosition () {
+		
 	}
 	
 	
