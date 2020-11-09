@@ -1,88 +1,41 @@
-package iA;
-
+package ia;
+import lejos.hardware.port.Port;
 import lejos.hardware.port.SensorPort;
-import lejos.robotics.Color;
-import library.ColorSensor;
-import library.TouchSensor;
-import library.UltraSonicSensor;
+import lejos.hardware.sensor.EV3TouchSensor;
+import lejos.hardware.sensor.EV3UltrasonicSensor;
+import lejos.robotics.SampleProvider;
 
-/**
- * 
- * @author Utilisateur
- *
+/*
+ * Cette classe gère le capteur toucher ainsi que le capteur UltraSonicSensor
  */
-public class Capteurs {
-	TouchSensor touch = new TouchSensor(SensorPort.S1);
-	UltraSonicSensor ultra = new UltraSonicSensor(SensorPort.S4);
-	ColorSensor    colorsensor = new ColorSensor(SensorPort.S3);
-	float distance;
-	boolean toucher;
-	String couleur;
-
-
-	public Capteurs() {
-		// TODO Auto-generated constructor stub
+public class Capteurs extends EV3TouchSensor {
+	EV3UltrasonicSensor port2 = new EV3UltrasonicSensor(SensorPort.S2);
+	
+	/*
+	 * On defini les ports sur lesuqles ont brancher les capteurs
+	 */
+	public Capteurs(Port port,EV3UltrasonicSensor port2){
+		super(port);
+		this.port2=port2;
 	}
-
-
-	public float CapterDistance (){
-		distance=ultra.getRange();
-		return distance;
-	}
-
-	public boolean AutreRobot() {
-		return ultra.getListen();
+	
+	/**
+	 * Retourne vrai si le capteur toucher est enfoncer
+	 */
+	public boolean isPressed(){
+		float[] sample = new float[1];
+		fetchSample(sample, 0);
+		return sample[0] != 0;
 	}
 
 	/**
-	 * @return boolean
+	 * Distance restante entre le robot et l'objet detecter
 	 */
-	public boolean CapteurToucher () {
-		return touch.isPressed();
+	public float getDistance() {
+		SampleProvider distance = this.getMode("Distance");
+		float[] sample = new float[distance.sampleSize()];
+		distance.fetchSample(sample, 0);
+		return sample[0];
 	}
-
-	/**
-	 * @return String
-	 */
-	public String CapteurCouleur () {
-		Color rgb = null;
-		colorsensor.setRGBMode();
-		colorsensor.setFloodLight(Color.WHITE);
-		int red= rgb.getRed();
-		int green = rgb.getGreen();
-		int blue = rgb.getBlue();
-		if(red<=3 && red>=1 && green<=3 && green>=1 && blue<=2 && blue>=0) {
-			return "noir";
-		}
-		else if(red<=13 && red>=11 && green<=13 && green>=11 && blue<=7 && blue>=8) {
-			return "gris";
-		}
-		else if(red<=3 && red>=1 && green<=3 && green>=1 && blue<=2 && blue>=0) {
-			return "blanc";
-		}
-		
-		else if(red<=3 && red>=1 && green<=3 && green>=1 && blue<=2 && blue>=0) {
-			return "jaune";
-		}
-		
-		else if(red<=3 && red>=1 && green<=3 && green>=1 && blue<=2 && blue>=0) {
-			return "vert";
-		}
-		
-		else if(red<=3 && red>=1 && green<=3 && green>=1 && blue<=2 && blue>=0) {
-			return "bleu";
-		}
-		
-		else return "gris";
-
-
-
-	}
-
-
-
-
-
-
-
+	
 }
