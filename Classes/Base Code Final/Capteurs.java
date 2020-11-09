@@ -6,12 +6,13 @@ import lejos.hardware.sensor.EV3UltrasonicSensor;
 import lejos.robotics.SampleProvider;
 
 /*
- * La classe gerant le capteur de pression du robot
+ * Cette classe gère le capteur toucher ainsi que le capteur UltraSonicSensor
  */
-public class Capteurs extends EV3TouchSensor{
+public class Capteurs extends EV3TouchSensor {
 	EV3UltrasonicSensor port2 = new EV3UltrasonicSensor(SensorPort.S2);
 	
 	/*
+	 * On defini les ports sur lesuqles ont brancher les capteurs
 	 */
 	public Capteurs(Port port,EV3UltrasonicSensor port2){
 		super(port);
@@ -19,7 +20,7 @@ public class Capteurs extends EV3TouchSensor{
 	}
 	
 	/**
-	 * true si le capteur est en position basse, false sinon
+	 * Retourne vrai si le capteur toucher est enfoncer
 	 */
 	public boolean isPressed(){
 		float[] sample = new float[1];
@@ -28,7 +29,7 @@ public class Capteurs extends EV3TouchSensor{
 	}
 
 	/**
-	 * la distance en metre entre l'obstacle present devant le robot et le robot
+	 * Distance restante entre le robot et l'objet detecter
 	 */
 	public float getDistance() {
 		SampleProvider distance = this.getMode("Distance");
