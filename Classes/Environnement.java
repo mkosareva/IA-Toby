@@ -1,4 +1,4 @@
-package ia;
+
 
 /**
  * La classe Envorinnement permet de savoir où se trouve le robot et à detecter des palets
@@ -9,14 +9,14 @@ public class Environnement {
 	private String couleur = new String();
 	private int angle;
 	private int debutR,debutA;
-	//code ajouté de la deuxième classe Environnement
+	/*code ajouté de la deuxième classe Environnement
 	*int nombrePalets=9;
 	*int nbPoint=0;
 	*final static String[] terrain = new String[] {"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R"};
 	*String position;
 	*String etat;
 	*String couleur1,couleur2;
-	//
+	*/
 	
 	/*
 	 * Angle de départ
@@ -34,12 +34,7 @@ public class Environnement {
 		this.debutA = debutA;
 	}
 	
-	/**
-	 * Couleur perçu en dernier
-	 */
-	public String getCouleur() {
-		return couleur;
-	}
+	
 	
 	/**
 	 * Donne la nouvelle couleur prélever
@@ -96,13 +91,15 @@ public class Environnement {
 		return 270;
 	}
 	
-	public int points () {
+	/**public int points () {
 		this.nbPoint+=1;
 		this.nombrePalets-=1;
 		return nbPoint;
 	}
+	*/
 	
 	public boolean perdu() {
+		String etat="";
 		if(etat=="perdu") {
 			return true;
 		}
@@ -147,7 +144,7 @@ public class Environnement {
 	}
 	
 	
-	
+	/*
 	public void getCouleur() {
 		//permet de recup les 2 dernières couleur sur lesquels on est passé, couleur1 est la plus récente
 		// et couleur2 la plus vieille
@@ -161,5 +158,6 @@ public class Environnement {
 		}
 		
 	}
+	*/
 
 }
