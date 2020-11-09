@@ -1,3 +1,4 @@
+package ia;
 
 public class Strategies {
 
