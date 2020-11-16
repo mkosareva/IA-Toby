@@ -2,22 +2,33 @@ package ia;
 
 import lejos.hardware.port.Port;
 import lejos.hardware.port.SensorPort;
+import lejos.hardware.sensor.BaseSensor;
+import lejos.hardware.sensor.EV3ColorSensor;
 import lejos.hardware.sensor.EV3TouchSensor;
 import lejos.hardware.sensor.EV3UltrasonicSensor;
 import lejos.robotics.SampleProvider;
 
 /*
- * Cette classe gère le capteur toucher ainsi que le capteur UltraSonicSensor
+ * Cette classe gère les capteurs de toucher, sonic et de couleurs
  */
-public class Capteurs extends EV3TouchSensor {
-	EV3UltrasonicSensor port2 = new EV3UltrasonicSensor(SensorPort.S2);
+public class Capteurs extends BaseSensor {
+	EV3UltrasonicSensor port1;
+	EV3TouchSensor port2;
+	EV3ColorSensor port3;
 	
 	/*
-	 * On defini les ports sur lesuqles ont brancher les capteurs
+	 * On definit les ports sur lesuqles ont brancher les capteurs
 	 */
-	public Capteurs(Port port,EV3UltrasonicSensor port2){
-		super(port);
+	public Capteurs(EV3UltrasonicSensor port1){
+		this.port1=port1;
+	}
+	
+	public Capteurs(EV3TouchSensor port2){
 		this.port2=port2;
+	}
+	
+	public Capteurs(EV3ColorSensor port3){
+		this.port3=port3;
 	}
 	
 	/**
@@ -30,13 +41,17 @@ public class Capteurs extends EV3TouchSensor {
 	}
 
 	/**
-	 * Distance restante entre le robot et l'objet detecter
+	 * Distance restante entre le robot et l'objet detecté
 	 */
 	public float getDistance() {
-		SampleProvider distance = this.getMode("Distance");
+		SampleProvider distance = port1.getDistanceMode();
 		float[] sample = new float[distance.sampleSize()];
 		distance.fetchSample(sample, 0);
 		return sample[0];
+	}
+	
+	public String getColor() {
+		return "";
 	}
 	
 }
