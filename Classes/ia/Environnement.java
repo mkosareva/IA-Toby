@@ -1,5 +1,6 @@
 package ia;
 
+import lejos.hardware.port.Port;
 
 /**
  * La classe Envorinnement permet de savoir où se trouve le robot et à detecter des palets
@@ -11,19 +12,20 @@ public class Environnement {
 	private int angle;
 	private int debutR,debutA;
 	/*code ajouté de la deuxième classe Environnement
-	*int nombrePalets=9;
-	*int nbPoint=0;
-	*final static String[] terrain = new String[] {"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R"};
-	*String position;
-	*String etat;
-	*String couleur1,couleur2;
+	*
 	*/
+	int nombrePalets=9;
+	int nbPoint=0;
+	final static String[] terrain = new String[] {"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R"};
+	String position;
+	String etat;
+	String couleur1,couleur2;
 	
 	/*
 	 * Angle de départ
 	 */
-	public Environnement(int angle) {
-		this.angle = angle;
+	public Environnement(int s3) {
+		this.angle = s3;
 	}
 
 	/* 
@@ -144,8 +146,6 @@ public class Environnement {
 		return null;
 	}
 	
-	
-	/*
 	public void getCouleur() {
 		//permet de recup les 2 dernières couleur sur lesquels on est passé, couleur1 est la plus récente
 		// et couleur2 la plus vieille
@@ -159,6 +159,6 @@ public class Environnement {
 		}
 		
 	}
-	*/
+	
 
 }
