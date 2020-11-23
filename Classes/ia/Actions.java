@@ -36,9 +36,9 @@ public class Actions {
 	} 
 
 	/**
-	 * MÈthode qui permet d'avancer en activant les deux servomoteurs
-	 * La vitesse doit Ítre supÈrieur ‡ 0
-	 * Si la distance est positive, le robot avance, si elle est nÈgative
+	 * M–πthode qui permet d'avancer en activant les deux servomoteurs
+	 * La vitesse doit –∫tre sup–πrieur –∞ 0
+	 * Si la distance est positive, le robot avance, si elle est n–πgative
 	 * le robot recule
 	 */
 	public void avancer(int vitesse, int distance) {
@@ -48,18 +48,18 @@ public class Actions {
 	}
 
 	/**
-	 * MÈthode qui permet de reculer en activant les deux servomoteurs
-	 * et en faisant appel ‡ la mÈthode avancer()
+	 * M–πthode qui permet de reculer en activant les deux servomoteurs
+	 * et en faisant appel –∞ la m–πthode avancer()
 	 */
 	public void reculer (int vitesse, int distance) { 
 		avancer(vitesse, -distance);
 	}
 	
 	/*
-	 * MÈthode qui permet au robot de s'orienter diffÈrement selon l'angle
-	 * rentrÈ en paramËtre
+	 * M–πthode qui permet au robot de s'orienter diff–πrement selon l'angle
+	 * rentr–π en param–∏tre
 	 * Si angle est positif, le robot tourne vers la droite
-	 * Si angle est nÈgatif, le robot tourne vers la gauche
+	 * Si angle est n–πgatif, le robot tourne vers la gauche
 	 */
 	public void orienter (int angle) {
 		mp.setAngularAcceleration(100);
@@ -88,12 +88,34 @@ public class Actions {
 	}
 	
 	public void recupererPalet () {
-
+		for(int i = 15; i > 10; i --) { //15 et 10 sont √† remplacer par une valeur √† d√©finir en test
+					if(getDistance() == i) {
+						avancer();
+						if(isPressed()) {
+							fermerPinces();
+						}
+					}
+					else {
+						tourner('g', 10);
+						if(getDistance() == i) {
+							avancer();
+							if(isPressed()) {
+								fermerPinces();
+							}
+						}
+						else {
+							tourner('d', 20);
+						}
+					}
+				}
 	}
 
-	public void trouverLigne () {
-
-	}
+	public void deposerPalet () {
+				if(CapteurCouleur() == "blanc") {
+					ouvrirPinces();
+					orienter(180);
+				}
+			}
 
 	public void test () {
 
