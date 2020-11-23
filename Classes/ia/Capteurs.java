@@ -1,5 +1,8 @@
 package ia;
+<<<<<<< HEAD
 
+=======
+>>>>>>> 2430a600a88f8c25ca46d81f3ccc3c3a7608b706
 import lejos.hardware.Button;
 import lejos.hardware.port.Port;
 import lejos.hardware.port.SensorPort;
@@ -59,10 +62,17 @@ public class Capteurs extends EV3TouchSensor {
 
 		//initialise une couleur appelée "RGB"
 		Color rgb;
+<<<<<<< HEAD
 		/*Le programme tournera jusqu'à ce qu'on appuye sur le bouton "echap" en haut à gauche de la brique.
 		 * ou qu'il capte du blanc */
 		while (Button.ESCAPE.isUp() && couleur != "blanc" ){
 			rgb = ((ColorDetector)color).getColor();
+=======
+		/*Le programme tournera jusqu'à ce qu'on appuye sur le bouton "echap" en haut à gauche de la brique. 
+		 * ou qu'il capte du blanc */
+		while (Button.ESCAPE.isUp() && couleur != "blanc" ){
+			rgb = ((ColorDetector) color).getColor();
+>>>>>>> 2430a600a88f8c25ca46d81f3ccc3c3a7608b706
 			nb1=rgb.getRed();
 			nb2=rgb.getGreen();// 34
 			nb3=rgb.getBlue(); //17
@@ -70,8 +80,15 @@ public class Capteurs extends EV3TouchSensor {
 				couleur="blanc";
 			}
 		}
+<<<<<<< HEAD
 
 		return couleur;
 	}
 
 }
+=======
+		return couleur;
+	}
+
+}
+>>>>>>> 2430a600a88f8c25ca46d81f3ccc3c3a7608b706
