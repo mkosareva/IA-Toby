@@ -14,8 +14,10 @@ import lejos.utility.Delay;
 public class Main {
 	
 	public static void main(String []a){
-		System.out.println("salut!");
-		
-		
+		Actions test=new Actions (MotorPort.A, MotorPort.B, MotorPort.C);
+		//test.orienter(90); //=> ok
+		//test.avancer(100, 100); //=> ok 
+		//test.reculer(100, 100); //=> ok 
+		test.fermerPinces();
 	}
 }

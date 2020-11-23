@@ -17,14 +17,14 @@ import lejos.hardware.Button;
 public class Actions {
 
 	private Chassis chassis;
-	private MovePilot mp;
+	MovePilot mp;
 	private EV3LargeRegulatedMotor moteurGauche;
 	private EV3LargeRegulatedMotor moteurDroit;
 	private EV3MediumRegulatedMotor moteurPince;
 	String AttRobot="Attention Robot !";
 	String AttPalet="Attention Palet !";
 	String AttMur="Attention Mur !";
-	
+
 	public Actions (Port portA, Port portB, Port portC) {
 		moteurGauche = new EV3LargeRegulatedMotor(portB);
 		moteurPince = new EV3MediumRegulatedMotor(portC);
@@ -37,49 +37,38 @@ public class Actions {
 
 	/**
 	 * Méthode qui permet d'avancer en activant les deux servomoteurs
+	 * La vitesse doit être supérieur à 0
+	 * Si la distance est positive, le robot avance, si elle est négative
+	 * le robot recule
 	 */
-	public void avancer() {
-		mp.forward();
-		Delay.msDelay(2000);
-	}
-
-	public void reculer () {
-		mp.backward();
-		Delay.msDelay(2000);
-	}
-
-	public void demiTour () {
-		
-		Delay.msDelay(500);//500 est à remplacer par une constante à définir en test
-		arreter();
-	}
-
-	public void tourner90 (char gd) {//tourne à gauche
-		if(gd=='d') {
-			moteurGauche.forward();
-			moteurDroit.stop();
-			Delay.msDelay(1000);//500 est à remplacer par une valeur à définir en test
-		}
-		else if(gd=='g') {
-			
-			Delay.msDelay(500);//500 est à remplacer par une valeur à définir en test
-			arreter();
-		}
+	public void avancer(int vitesse, int distance) {
+		mp.setLinearAcceleration(vitesse);
+		mp.setLinearSpeed(vitesse);
+		mp.travel(distance);
 	}
 
 	/**
-	 * Méthode qui doit tourner le robot d'un angle défini à gauche ou à droite
-	 * @param gd désigne la gauche ou la droite
-	 * @param angle est l'angle dont le robot doit tourner, l'angle est déjà converti en temps
+	 * Méthode qui permet de reculer en activant les deux servomoteurs
+	 * et en faisant appel à la méthode avancer()
 	 */
-	public void tourner (char gd,int angle) {
-		//avancerUneRoue(gd,angle);
-		//check le SonicSensor pour savoir si on peut avancer
-		//check le ColorSensor pour savoir où on est à peu près
+	public void reculer (int vitesse, int distance) { 
+		avancer(vitesse, -distance);
+	}
+	
+	/*
+	 * Méthode qui permet au robot de s'orienter différement selon l'angle
+	 * rentré en paramètre
+	 * Si angle est positif, le robot tourne vers la droite
+	 * Si angle est négatif, le robot tourne vers la gauche
+	 */
+	public void orienter (int angle) {
+		mp.setAngularAcceleration(100);
+		mp.setAngularSpeed(100);
+		mp.rotate(angle);
 	}
 
 	public void arreter () {
-		
+		mp.stop();
 	}
 
 	public void esquiverRobot (){
@@ -87,16 +76,17 @@ public class Actions {
 	}
 
 	public void reconnaitre () {
-		//if()
+		
 	}
 
 	public void ouvrirPinces () {
-		
+		moteurPince.rotate(1000);
 	}
 
 	public void fermerPinces () {
-		
+		moteurPince.rotate(-1000);
 	}
+	
 	public void recupererPalet () {
 
 	}
