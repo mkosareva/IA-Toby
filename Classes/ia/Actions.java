@@ -29,9 +29,9 @@ public class Actions {
 		moteurGauche = new EV3LargeRegulatedMotor(portB);
 		moteurPince = new EV3MediumRegulatedMotor(portC);
 		moteurDroit = new EV3LargeRegulatedMotor(portA);
-		Wheel wheel1 = WheeledChassis.modelWheel(moteurGauche, 56).offset(-60);
-		Wheel wheel2 = WheeledChassis.modelWheel(moteurDroit,  56).offset( 60);
-		chassis = new WheeledChassis(new Wheel[] { wheel1, wheel2 }, WheeledChassis.TYPE_DIFFERENTIAL);
+		Wheel wheelG = WheeledChassis.modelWheel(moteurGauche, 56).offset(-60);
+		Wheel wheelD = WheeledChassis.modelWheel(moteurDroit,  56).offset( 60);
+		chassis = new WheeledChassis(new Wheel[] { wheelG, wheelD }, WheeledChassis.TYPE_DIFFERENTIAL);
 		mp = new MovePilot(chassis);
 	} 
 
@@ -80,11 +80,11 @@ public class Actions {
 	}
 
 	public void ouvrirPinces () {
-		moteurPince.rotate(1000);
+		moteurPince.rotate((int)moteurPince.getMaxSpeed());
 	}
 
 	public void fermerPinces () {
-		moteurPince.rotate(-1000);
+		moteurPince.rotate(-(int)moteurPince.getMaxSpeed());
 	}
 	
 	public void recupererPalet () {
@@ -117,12 +117,42 @@ public class Actions {
 				}
 			}
 
-	public void test () {
+	
+	public void get2PremierPaletPourUnAvantageDeFou() {
 
-	}
+		/**
+		if(etatPinces==false) {
+			ouvrirPinces();
+		}
 
-	public void getPremierPalet() {
-		
+		while(!port.isPressed()) {
+			avancer(100,100);
+		}
+		*/
+		avancer(400,1000);
+		arreter();
+		fermerPinces();
+		orienter(45);
+		avancer(400,200);
+		arreter();
+		orienter(-45);
+		avancer(400,1000);
+		/*while(couleur!="blanc") {
+			avancer();
+		}
+		*/
+		arreter();
+		ouvrirPinces();
+		avancer(300,-200);
+		//à partir de là on getDeuxième palet
+		orienter(135);//p.ê on peut dire -45 et aller cherche le 2eme palet directement ici //en réalité il faut qu'on s'aide du capteur ultrasonic ici
+		avancer(400,500);//en réalité on veut avancer tant que capteur toucher pas enfoncé
+		fermerPinces();
+		orienter(-135);
+		avancer(400,600);
+		ouvrirPinces();
+		avancer(300,-100);
+		orienter(180);
 	}
 
 }

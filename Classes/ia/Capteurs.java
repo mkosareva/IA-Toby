@@ -17,7 +17,8 @@ public class Capteurs {
 	EV3TouchSensor port = new EV3TouchSensor(SensorPort.S2);
 	EV3UltrasonicSensor port2 = new EV3UltrasonicSensor(SensorPort.S4);
 	EV3ColorSensor port3 = new EV3ColorSensor(SensorPort.S3);
-
+	private boolean pincesOpen=true;
+	private SampleProvider sp=port.getTouchMode();
 	/*
 	 * On defini les ports sur lesquels sont brancher les capteurs
 	 */
@@ -32,17 +33,29 @@ public class Capteurs {
 	/**
 	 * Retourne vrai si le capteur toucher est enfoncer
 	 */
-	public boolean isPressed(){
-		float[] sample = new float[1];
-		fetchSample(sample, 0);
-		return sample[0] != 0;
+	public boolean isPressed() {
+        float[] sample = new float[1];
+        sp.fetchSample(sample, 0);
+        return sample[0] != 0;
+	}
+	/*
+	 * Méthode qui prend en paramètre l'état des pinces, ouvertes vs fermées
+	 * Le robot commence avec les pinces ouvertes
+	 * return un 
+	 */
+	public void etatPinces(boolean open) {
+		pincesOpen=open;
+	}
+	
+	public boolean getPincesOpen() {
+		return pincesOpen;
 	}
 
 	/**
 	 * Distance restante entre le robot et l'objet detecter
 	 */
 	public float getDistance() {
-		SampleProvider distance = this.getMode("Distance");
+		SampleProvider distance = port2.getMode("Distance");
 		float[] sample = new float[distance.sampleSize()];
 		distance.fetchSample(sample, 0);
 		return sample[0];

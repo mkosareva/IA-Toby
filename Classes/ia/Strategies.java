@@ -5,20 +5,19 @@ import lejos.hardware.port.MotorPort;
 import lejos.hardware.port.SensorPort;
 import lejos.hardware.sensor.EV3UltrasonicSensor;
 import lejos.utility.Delay;
-import library.TouchSensor;
 
 public class Strategies {
 
 	UnregulatedMotor motorA = new UnregulatedMotor(MotorPort.A);
 	UnregulatedMotor motorB = new UnregulatedMotor(MotorPort.B);
 	UnregulatedMotor motorC = new UnregulatedMotor(MotorPort.C);
-	TouchSensor Touch = new TouchSensor(SensorPort.S2);
+	
 
 	EV3UltrasonicSensor CaptDist = new EV3UltrasonicSensor(SensorPort.S2);
 
 	float distance;
 
-
+	Actions test=new Actions (MotorPort.A, MotorPort.B, MotorPort.C);
 
 	public Strategies() {
 		// TODO Auto-generated constructor stub
