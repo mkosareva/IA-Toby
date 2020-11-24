@@ -72,7 +72,7 @@ public class Actions {
 	}
 
 	public void esquiverRobot (){
-
+		
 	}
 
 	public void reconnaitre () {
@@ -99,6 +99,8 @@ public class Actions {
 
 	}
 
-
+	public void getPremierPalet() {
+		
+	}
 
 }

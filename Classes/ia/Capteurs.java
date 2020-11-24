@@ -13,18 +13,21 @@ import lejos.robotics.SampleProvider;
 /*
  * Cette classe gère le capteur toucher ainsi que le capteur UltraSonicSensor
  */
-public class Capteurs extends EV3TouchSensor {
-	EV3TouchSensor port = new EV3TouchSensor(SensorPort.S3);
-	EV3UltrasonicSensor port2 = new EV3UltrasonicSensor(SensorPort.S2);
+public class Capteurs {
+	EV3TouchSensor port = new EV3TouchSensor(SensorPort.S2);
+	EV3UltrasonicSensor port2 = new EV3UltrasonicSensor(SensorPort.S4);
+	EV3ColorSensor port3 = new EV3ColorSensor(SensorPort.S3);
 
 	/*
 	 * On defini les ports sur lesquels sont brancher les capteurs
 	 */
 
-	public Capteurs(Port port,EV3UltrasonicSensor port2){
-		super(port);
-		this.port2=port2;
+	/*public Capteurs(Port s2,Port s4, Port s3){
+		this.port=s2;
+		this.port2=s4;
+		this.port3=s3;
 	}
+	*/
 
 	/**
 	 * Retourne vrai si le capteur toucher est enfoncer
@@ -61,7 +64,7 @@ public class Capteurs extends EV3TouchSensor {
 		Color rgb;
 		/*Le programme tournera jusqu'à ce qu'on appuye sur le bouton "echap" en haut à gauche de la brique.
 		 * ou qu'il capte du blanc */
-		while (Button.ESCAPE.isUp() && couleur != "blanc" ){
+		while (Button.ESCAPE.isUp() || couleur != "blanc" ){
 			rgb = ((ColorDetector)color).getColor();
 			nb1=rgb.getRed();
 			nb2=rgb.getGreen();// 34
