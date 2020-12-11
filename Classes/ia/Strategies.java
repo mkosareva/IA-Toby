@@ -1,101 +1,217 @@
 package ia;
 
-import lejos.hardware.motor.UnregulatedMotor;
+import lejos.hardware.Button;
 import lejos.hardware.port.MotorPort;
 import lejos.hardware.port.SensorPort;
-import lejos.hardware.sensor.EV3UltrasonicSensor;
-import lejos.utility.Delay;
 
 public class Strategies {
 
-	UnregulatedMotor motorA = new UnregulatedMotor(MotorPort.A);
-	UnregulatedMotor motorB = new UnregulatedMotor(MotorPort.B);
-	UnregulatedMotor motorC = new UnregulatedMotor(MotorPort.C);
-	
+	Actions action=new Actions (MotorPort.A, MotorPort.B, MotorPort.C);
+	Capteurs capteur=new Capteurs(SensorPort.S2,SensorPort.S4,SensorPort.S3);
 
-	EV3UltrasonicSensor CaptDist = new EV3UltrasonicSensor(SensorPort.S2);
-
-	float distance;
-
-	Actions test=new Actions (MotorPort.A, MotorPort.B, MotorPort.C);
+	private boolean pincesOuverte =true;
+	private boolean perdu=false;
 
 	public Strategies() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public void getPremierPalet() {
+	public void rechercher () {
+		int angle=0;
+		while(pincesOuverte!=true) {
+			/*
+			 * Tant que la distance est inferieur � 1,200m 
+			 * et sup�rieure � 0,325m, ET que le capteur 
+			 * toucher n'est pas press�, on avance
+			 */
+			while((capteur.getDistance()<0.600 && capteur.getDistance()> 0.325) && !capteur.isPressed()) { 
+				// il faudra remettre 1.300 pour le vrai au lieu de 0.600
+				action.avancer(400,50);
 
-		if(etatPinces==false) {
-			ouvrirPinces();
+				/*
+				 * si le capteur distance indique 0,326m on avance encore un peu
+				 * afin de savoir si palet ou pas
+				 */
+				if(capteur.getDistance()<=0.376) {
+					action.avancer(400,80);
+					/*
+					 * Si deviens superieur on a affaire � un palet
+					 */
+					if(capteur.getDistance()>0.326) {
+						action.avancer(400,300);
+						if(pincesOuverte) action.fermerPinces();
+					}
+				}
+			}
+
+			if(capteur.getDistance()<0.326 && !capteur.isPressed()) {
+				/*
+				 * ici le cas ou on a pas affaire a un palet
+				 */
+				while((capteur.getDistance()>0.600 || capteur.getDistance()< 0.325) && !capteur.isPressed()) {
+					/*
+					 * on tourne doucement jusqu'a trouver un
+					 * objet (techniquement palet) proche +
+					 * de nous
+					 */
+					action.orienter(20);
+					angle=angle+20;
+				}
+			}
+
+			else if(capteur.getDistance()>0.600) {
+				/*
+				 * tant qu'on ne detecte rien
+				 * on tourne 
+				 */
+				action.orienter(20);
+				angle=angle+20;
+			}
 		}
-
-		while(!Touch.isPressed()) {
-			avancer();
+		if(capteur.isPressed()) {
+			if(pincesOuverte) action.fermerPinces();
 		}
-		arreter();
-
-		fermerPinces();
-
-		tourner90('g');
-
-		avancer();
-
-		Delay.msDelay(1500);
-
-		arreter();
-
-		tourner90('d');
-
-		while(couleur!="blanc") {
-			avancer();
-		}
-
-		arreter();
-
-		ouvrirPinces();
-
-		break;
+		action.orienter(180-angle);
 	}
 
-	public void chercherEtRecupererUnPalet() {
-
-		if(etatPinces==false) {
-			ouvrirPinces();
+	public void deposerPalet () {
+		while(Button.ESCAPE.isUp() || capteur.getDistance()<0.2) {
+			action.avancer(400,100);
 		}
+		action.ouvrirPinces();
+		action.orienter(180);
+	}
 
-		distance=CaptDist.getDistance();
-		
-		//il faudrait faire une méthode tourner(char,float) qui indique dans quel sens le robot va tourner et pendant combien de temps
-		// dans ce while, on le fait tourner jusqu'à ce qu'il capte un élément dans une distance donnée
-		while(distance>.15 && distance<.6) {
-			tourner('d',(int) 2);
-			Delay.msDelay(500);
-			distance=CaptDist.getDistance();
+	public boolean getPincesOuverte() {
+		return pincesOuverte;
+	}
+
+	public void setPincesOuverte(boolean b) {
+		pincesOuverte=b;
+	}
+
+	public boolean getPerdu() {
+		return perdu;
+	}
+
+	public void setPerdu(boolean b) {
+		perdu=b;
+	}
+
+	/**
+	 * 
+	 * @param i l'angle duquel le robot tourne
+	 * @param j
+	 */
+	public void tactiqueNormale(int i, int j, int k) {
+		action.avancer(400,700);
+		action.arreter();
+		action.fermerPinces();
+		//if(capteur.isPressed()) {
+		action.orienter(i);
+		action.avancer(400,250);
+		action.arreter();
+		action.orienter(-i);
+		action.avancer(300,1800);
+		action.arreter();
+		action.ouvrirPinces();
+		action.avancer(300,-100);
+		//appel � une autre m�thode ?
+		action.orienter(j);
+		action.avancer(300,700);
+		action.fermerPinces();
+		//if(capteur.isPressed()) {
+		action.orienter(-j);
+		action.avancer(300,700);
+		action.ouvrirPinces();
+		action.avancer(300,-100);
+		action.orienter(180);
+		action.avancer(300, 1400);
+		action.fermerPinces();
+		action.orienter(180);
+		action.avancer(300, 1500);
+		action.ouvrirPinces();
+		action.avancer(300, -100);
+		action.orienter(k);
+		action.avancer(300, 800);
+		action.avancer(300, 800);
+		action.fermerPinces();
+		action.orienter(-129);
+		action.avancer(300, 1750);
+		action.ouvrirPinces();
+		action.orienter(90);
+		action.avancer(400, 1700);
+		action.orienter(90);
+		action.avancer(300, 750);
+		action.orienter(180);
+		action.avancer(300, 900);
+		action.ouvrirPinces();
+		action.orienter(180);
+		if(capteur.getDistance()<0.5) {
+			action.avancer(400, 390);
+			action.fermerPinces();
+			action.orienter(180);
 		}
-		//le problème c'est qu'il sera pas totalement en face du palet pour aller le chercher, il faut ajuster l'angle, d'où recommencer
-		//à tourner un peu après que l'élément soit rentré en ligne de vue.
-		tourner((int) 2);
-		
-		//une fois que le robot est bien en face, on le fait avancer jusqu'à ce que le bouton de toucher soit poussé
-		//on prévoit le cas où si le robot parcours une trop grande distance c'est que le palet n'est pas atteint/qu'il est dans un mur
-		//et du coup on recommence la méthode
-
-		while(!Touch.isPressed()) {
-			if(distanceParcourue>20) {
-				chercherEtRecupererUnPalet();
+		else {
+			for(int n=2;n<10;n++) {
+				rechercher();
+				deposerPalet();
 			}
-			avancer();
-			Delay.msDelay(1500);
-			distanceParcourue+=5;
 		}
-		
-		arreter();
-
-		fermerPinces();
-		
-		//faire la suite, comment on sait qu'il est dans le bon sens pour repartir dans le camp ennemi ?
+		for(int n=2;n<10;n++) {
+			rechercher();
+			deposerPalet();
+		}
 
 
+		/*action.ouvrirPinces();
+		setPerdu(true);
+		rechercher();//placer le recherche dans le main plut�t;
+		 */
+	}
+
+	public void tournerAngle(int angle) {
+		action.orienter(angle);
+		action.avancer(400,650);
+		action.fermerPinces();
+		action.orienter(-angle);
+		action.avancer(400, 600);
+	}
+
+	public void s1_debutG () {
+		action.ouvrirPinces();
+		tactiqueNormale(-90, 157, 129);
+	}
+
+	public void s2_debutM () {
+		action.avancer(400, 600);
+		action.fermerPinces();	
+		action.avancer(400,1000);
+		action.orienter(90);
+		action.avancer(400, 250);
+		action.orienter(-90);
+		action.avancer(400,300);
+		action.ouvrirPinces();
+		action.avancer(300, -100);
+		action.orienter(180);
+		for(int i=2;i<10;i++) {
+			action.avancer(400, 800);
+			rechercher();
+			action.avancer(400, 900);
+			if(capteur.getDistance()<20) {
+				action.arreter();
+				action.orienter(180);
+			}
+		}
+	}
+
+	public void s3_debutD () {
+		action.ouvrirPinces();
+		tactiqueNormale(90, -157, -129);
+	}
+
+	public void stop() {
+		action.arreter();
 	}
 
 }
