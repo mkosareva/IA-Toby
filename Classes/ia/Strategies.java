@@ -7,7 +7,7 @@ import lejos.hardware.port.SensorPort;
 public class Strategies {
 
 	Actions action=new Actions (MotorPort.A, MotorPort.B, MotorPort.C);
-	Capteurs capteur=new Capteurs(SensorPort.S2,SensorPort.S4,SensorPort.S3);
+	Capteurs capteur=new Capteurs();
 
 	private boolean pincesOuverte =true;
 	private boolean perdu=false;
@@ -16,6 +16,9 @@ public class Strategies {
 		// TODO Auto-generated constructor stub
 	}
 
+	/**
+	 * 
+	 */
 	public void rechercher () {
 		int angle=0;
 		while(pincesOuverte!=true) {
@@ -74,28 +77,15 @@ public class Strategies {
 		action.orienter(180-angle);
 	}
 
+	/**
+	 * 
+	 */
 	public void deposerPalet () {
 		while(Button.ESCAPE.isUp() || capteur.getDistance()<0.2) {
 			action.avancer(400,100);
 		}
 		action.ouvrirPinces();
 		action.orienter(180);
-	}
-
-	public boolean getPincesOuverte() {
-		return pincesOuverte;
-	}
-
-	public void setPincesOuverte(boolean b) {
-		pincesOuverte=b;
-	}
-
-	public boolean getPerdu() {
-		return perdu;
-	}
-
-	public void setPerdu(boolean b) {
-		perdu=b;
 	}
 
 	/**

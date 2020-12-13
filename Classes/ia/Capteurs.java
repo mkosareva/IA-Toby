@@ -12,29 +12,51 @@ import lejos.robotics.ColorDetector;
 import lejos.robotics.SampleProvider;
 import lejos.utility.Delay;
 
-/*
- * Cette classe gère le capteur toucher ainsi que le capteur UltraSonicSensor
+/**
+ * Cette classe contient toutes les méthodes qui doivent permettre à notre agent
+ * d'évoluer en fonction de son environnement. Pour cela on utilise 3 capteurs ;
+ * 1 capteur de touché qui renvoie true ou flase - 1 capteur de couleur qui retourne
+ * ????? - 1 capteur ultrasonique qui permet retourner une distance ou un booléen si
+ * il détecte un autre robot. Les attributs de
+ * type SampleProvider permettent de récupérer les valeurs des capteurs. On se
+ * propose de mettre ces valeurs dans des tableaux.
+ * @author Toby's group
+ *
  */
 public class Capteurs {
+	/**
+	 * Les trois capteurs
+	 */
 	EV3TouchSensor cTouche =new EV3TouchSensor(SensorPort.S2);;
 	EV3UltrasonicSensor cUltra =new EV3UltrasonicSensor(SensorPort.S4);
 	EV3ColorSensor cColor =new EV3ColorSensor(SensorPort.S3);
-
+	
+	/**
+	 * Les trois SampleProvider
+	 */
 	private SampleProvider touche;
 	private SampleProvider ultra ;
 	private SampleProvider color;
-
+	
+	/**
+	 * Les tableaux des capteurs, qui permettent l'accès direct aux valeurs
+	 * des capteurs.
+	 */
 	private float[] tabT;
 	private float[] tabU;
+	private float[] tabU2;
 	private float[] tabC;
 
 	private boolean pincesOpen=true;
 
-	/*
-	 * On defini les ports sur lesquels sont branchés les capteurs
+	/**
+	 * Constructeur de la classe qui permet d'initialiser les attributs
+	 * d'instance, soit les SampleProvider et les tableaux.	
+	 * @param s2
+	 * @param s4
+	 * @param s3
 	 */
-
-	public Capteurs(Port s2,Port s4, Port s3){
+	public Capteurs(){
 		/**cTouche=new EV3TouchSensor(s2);
 		cUltra=new EV3UltrasonicSensor(s4);
 		cColor=new EV3ColorSensor(s3);*/
@@ -46,45 +68,54 @@ public class Capteurs {
 		tabT = new float [touche.sampleSize()];
 		tabU = new float [ultra.sampleSize()];
 		tabC = new float [color.sampleSize()];
-	}
+	} 
 
 	/**
-	 * Retourne vrai si le capteur toucher est enfoncer
+	 * Méthode qui indique l'état du capteur de touché.
+	 * @return true ou false selon l'état du capteur
 	 */
 	public boolean isPressed() {
 		float[] sample = new float[1];
 		touche.fetchSample(sample, 0);
 		return sample[0] != 0;
 	}
-	/*
-	 * Méthode qui prend en paramètre l'état des pinces, ouvertes vs fermées
-	 * Le robot commence avec les pinces ouvertes
-	 * return un 
+
+	/**
+	 * Méthode qui prend en paramètre l'état futur des pinces, ouvertes vs fermées
+	 * Le robot commence avec les pinces fermées. 
+	 * @param open
 	 */
-	public void etatPinces(boolean open) {
-		pincesOpen=open;
+	public void etatPinces(boolean etat) {
+		if(pincesOpen==etat) return;
+		else pincesOpen=etat;
 	}
 
+	/**
+	 * Getter simple de l'état des pinces.
+	 * @return un booléen qui permet de connaitre l'état des pinces
+	 */
 	public boolean getPincesOpen() {
 		return pincesOpen;
 	}
 
-	/**
-	 * Distance restante entre le robot et l'objet detecter
-	 */
 
-	float getDistance() {
+	/**
+	 * Méthode qui retourne la distance détectée par le capteur ultrasonique
+	 * @return float la valeur en cm séparant le robot de l'objet detecté
+	 */
+	public float getDistance() {
 		cUltra.enable();
 		ultra = cUltra.getDistanceMode();
 		ultra.fetchSample(tabU, 0);
 		return tabU[0];
 	}
 
-	public boolean capteurCouleur() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-	public String couleur() {
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public String getCouleur() {
 		String couleur = "gris";
 		int nb1=0,nb2=0,nb3=0;
 		//modifie le capteur de couleur pour lui faire capter le taux de rouge, bleu et vert présent dans la couleur détecté
@@ -113,14 +144,24 @@ public class Capteurs {
 		return couleur;
 	}
 
+	/**
+	 * Méthode non réalisée qui devait permettre de ne pas percuter 
+	 * un robot après l'avoir détecté.
+	 */
 	public void esquiverRobot (){
 		
 	}
 
-	public SampleProvider reconnaitreRobot() {
+	/**
+	 * Méthode qui utilise le mode "écoute" du capteur ultrasonique pour
+	 * reconnaitre le robot adverse et stocke la valeur dans un tableau.
+	 * @return float de la valeur du SampleProvider du capteur, si la méthode
+	 * retourne 1 c'est qu'un robot est détecté.
+	 */
+	public float reconnaitreRobot() {
 		cUltra.enable();
 		ultra = cUltra.getListenMode();
-		//ultra.fetchSample(tabUl, 0);
-		return ultra;
+		ultra.fetchSample(tabU2, 0);
+		return tabU2[0];
 	}
 }

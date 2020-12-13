@@ -2,7 +2,13 @@ package ia;
 
 import lejos.hardware.port.MotorPort;
 import lejos.hardware.port.SensorPort;
-
+/**
+ * Classe qui nous a permis de faire les test dont nous avions besoin pour les autres
+ * classes principales. Les tests on aussi permis de faire le calibrage de certains
+ * paramètre pour le robot comme l'ouverture des pinces ou la sélection des couleurs.
+ * @author Toby's group
+ *
+ */
 public class Banane {
 
 	public static void main(String []a){

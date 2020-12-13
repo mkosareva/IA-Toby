@@ -1,164 +1,117 @@
 package ia;
 
+import java.awt.Color;
+
 import lejos.hardware.port.Port;
 
 /**
- * La classe Envorinnement permet de savoir où se trouve le robot et à detecter des palets
- * 
- * !! ATTENTION il faudra rajouter les couleurs aussi afin de pouvoir se reperer 
+ * Cette classe permet de donner de l'information à notre agent en ce qui concerne
+ * se position sur le terrain. 
  */
 public class Environnement {
-	private String couleur = new String();
+	
+	/**
+	 * Les attributs représentant les couleurs présentent sur le terrain.
+	 */
+	private final Color RED=Color.RED;
+	private final Color GRAY=Color.GRAY;
+	private final Color YELLOW=Color.YELLOW;
+	private final Color BLACK=Color.BLACK;
+	private final Color GREEN=Color.GREEN;
+	private final Color WHITE=Color.WHITE;
+	private final Color BLUE=Color.BLUE;
+	
+	
+	
 	private int angle;
 	private int debutR,debutA;
-	/*code ajouté de la deuxième classe Environnement
-	*
-	*/
-	int nombrePalets=9;
-	int nbPoint=0;
+	
 	final static String[] terrain = new String[] {"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R"};
 	String position;
-	String etat;
-	String couleur1,couleur2;
-	
-	/*
-	 * Angle de départ
-	 */
-	public Environnement(int s3) {
-		this.angle = s3;
-	}
 
-	/* 
-	 * La position debutR, celle a partir de laquelle notre robot demarre
-	 * La position debutA, celle à partir de laquelle l'autre robot demarre
+	String couleur1,couleur2;
+
+	/**
+	 * Constructeur qui instancie les attributs selon les position de départ des robots.
+	 * La position du robot adverse est donnée par rapport à celle de notre robot.
+	 * @param debutA position de départ du robot adverse
+	 * @param debutR position de départ de notre robot
 	 */
 	public Environnement(int debutA, int debutR) {
 		this.debutR = debutR;
 		this.debutA = debutA;
 	}
 	
-	
-	
 	/**
-	 * Donne la nouvelle couleur prélever
-	 */
-	public void setCouleur(String couleur) {
-		this.couleur = couleur;
-	}
-	
-	/*
-	 * Retourne l'angle
+	 * Méthode qui permet de définir un angle à l'aide de la distance 
+	 * du capteur ultrasonique de la classe Capteurs. Le robot doit tourner
+	 * jusqu'à ce qu'il atteigne la plus petite distance. Il sera alors face à
+	 * un mur. 
+	 * @return int l'arrondi à l'entier le plus proche de l'angle 
 	 */
 	public int getAngle() {
 		return this.angle;
 	}
-	
-	/*
-	 * Nouvelle valeur de la direction
-	 */
 
-	public void setAngle(int angle) {
-		this.angle = angle;
-	}
-
-	/*
-	 * Position de depart du robot Adverse 
+	/**
+	 * Méthode qui retourne une position de départ.
+	 * @return debutA la position de départ du robot adverse.
 	 */
 	public int getDebutA() {
 		return debutA;
 	}
-	/*
-	 * Position de depart de notre robot
+
+	/**
+	 * Méthode qui retourne une position de départ.
+	 * @return debutR la position de départ de notre robot.
 	 */
 	public int getDebutR() {
 		return debutR;
 	}
-
-	/*
-	 *  la direction du mur a droite de la base ennemie
+	
+	
+	
+	/**
+	 * Méthode qui prend en paramètre un tableau de String et attrape une exception si la couleur
+	 * n'est pas équivalente à un attribut. La référence du terrain numéroté est sur la page Github
+	 * du projet. Cette méthode était un autre moyen de trouver la direction du robot.
+	 * @param couleur les dernières couleurs détectées par le robot.
+	 * @return char un charactère du tableau terrain.
 	 */
-	public int getDirDroiteA() {
-		if(debutA==0) {
-			return 270;
-		}
-		return 90;
-	}
-
-	/*
-	 *  la direction du mur a gauche de la base ennemie
-	 */
-	public int getDirGaucheA() {
-		if(debutA==0) {
-			return 90;
-		}
-		return 270;
+	public char getPos(String[] couleur) {
+		return ' ';
 	}
 	
-	/**public int points () {
-		this.nbPoint+=1;
-		this.nombrePalets-=1;
-		return nbPoint;
+	/**
+	 * Méthode qui devait servir à rappeler les deux dernières couleurs perçues par le
+	 * capteur de couleurs.
+	 * @return tab un tableau de String contenant les couleurs captés.
+	 */
+	public String[] lastColors() {
+		String [] tab= new String [2];
+		Capteurs CapteurCouleur = new Capteurs();
+		if(couleur1!=null) {
+			couleur2=CapteurCouleur.getCouleur();
+			tab[0]=couleur2;
+			tab[1]=couleur1;
+			return tab;
+		}
+		couleur1=CapteurCouleur.getCouleur();
+		tab[0]=couleur1;
+		tab[1]="unknown";
+		return tab;
 	}
-	*/
 	
-	public boolean perdu() {
-		String etat="";
+	/**
+	 * Méthode qui devait être utilisée pour prévenir si le robot est dans un état dit
+	 * "perdu" mais il est plus efficace d'appeler directement une méthode de recherche.
+	 * @return boolean qui indique true si le robot est perdu.
+	 */
+	/*public boolean perdu() {
 		if(etat=="perdu") {
 			return true;
 		}
 		else return false;
-	}
-	
-	/*public void avancer (cm) {
-		activerServomoteurs();
-		Delay.msDelay(cm);// utiliser un paramètre à la place de 2000
-		if(distance<paramètreFinalADefinir) {
-			motorA.stop(); //motor A s'arrête
-			motorB.stop(); //motor A s'arrête
-			if() {//si robot
-				//faire action X
-				return AttRobot;
-			}
-			else if( ) {//si palet
-				//faire action Y
-				return AttPalet;
-			}
-			else if (){//si mur
-				//faire action Z
-				return AttRobot;
-			}
-			else () {//si ligne blanche
-				//faire action B
-				return "Ligne blanche";
-			}
-		}
-		return null;
 	}*/
-
-	
-	 
-	
-	public String getPos() {
-		//àfinir
-	/*if(couleur1=="jaune"&&couleur2=="vert"||couleur1=="jaune"&&couleur2=="noir"||couleur1=="jaune"&&couleur2=="vert") {
-		position="B";
-	}*/
-		return null;
-	}
-	
-	public void getCouleur() {
-		//permet de recup les 2 dernières couleur sur lesquels on est passé, couleur1 est la plus récente
-		// et couleur2 la plus vieille
-		Capteurs Captcouleur = new Capteurs();
-		if(couleur1==null) {
-		couleur1=Captcouleur.CapteurCouleur();
-		}
-		else {
-			couleur2=couleur1;
-			couleur1=Captcouleur.CapteurCouleur();
-		}
-		
-	}
-	
 
 }
